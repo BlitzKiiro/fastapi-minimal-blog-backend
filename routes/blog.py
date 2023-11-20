@@ -5,6 +5,7 @@ from db.database import get_db
 from dto.blog import BlogCreate, BlogUpdate
 from auth.auth import oauth2_scheme, decode_access_token
 from repository import blog as blog_repository
+from repository import user as user_reposirotry
 
 BlogRouter = APIRouter()
 
@@ -38,7 +39,7 @@ def create_blog(blog: BlogCreate, db: Session =  Depends(get_db), token: str =De
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    user = blog_repository.get_user_by_username(db=db, username=username)
+    user = user_reposirotry.get_user_by_username(db=db, username=username)
     blog_with_author = blog.model_copy(update={"author_id":user.id})
     return blog_repository.create_blog(db=db, blog=blog_with_author)
 
